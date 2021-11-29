@@ -26,25 +26,25 @@ public class XHeaderAuthenticationFilter extends OncePerRequestFilter {
 
     public static String oauthIpHeaderKey = "X-Forwarded-For";
 
-    @Value("${sample.24Bit.IPBlock}")
+    @Value("${sample.24Bit.IPBlock}") // 10.0.0.0
     private String sample24BitIPBlock;
-    @Value("${sample.24Bit.IPBlock.mask}")
+    @Value("${sample.24Bit.IPBlock.mask}") // 255.0.0.0
     private String sample24BitIPBlockMask;
-    @Value("${sample.20Bit.IPBlock}")
+    @Value("${sample.20Bit.IPBlock}") // 172.16.0.0
     private String sample20BitIPBlock;
-    @Value("${sample.20Bit.IPBlock.mask}")
+    @Value("${sample.20Bit.IPBlock.mask}") // 255.224.0.0
     private String sample20BitIPBlockMask;
-    @Value("${sample.16Bit.IPBlock}")
+    @Value("${sample.16Bit.IPBlock}") // 192.168.0.0
     private String sample16BitIPBlock;
-    @Value("${sample.16Bit.IPBlock.mask}")
+    @Value("${sample.16Bit.IPBlock.mask}") //255.255.0.0
     private String sample16BitIPBlockMask;
 
-    @Value("${sample.ipblock.enable}")
+    @Value("${sample.ipblock.enable}") // true
     private boolean ipBlockEnable;
 
-    @Value("${sample.system.key}")
+    @Value("${sample.system.key}") // cb68334f-ad51-4f36-a134-ffbbe6e3fafe
     private String oauthSampleSystemKey;
-    @Value("${sample.system.value}")
+    @Value("${sample.system.value}") // SecurityTokenForAddressing
     private String oauthSampleSystemValue;
 
     @Autowired

@@ -9,13 +9,13 @@ import org.springframework.ldap.core.support.LdapContextSource;
 @Configuration
 public class LdapConfiguration {
 
-    @Value("${ldap.template.url}")
+    @Value("${ldap.template.url}") //   ldap://glbtds.samplesystem.pvt:389
     private String ldapUrl;
 
-    @Value("${ldap.template.userDn}")
+    @Value("${ldap.template.userDn}")//  uid=samplesystem, ou=Users,DC=SAMPLESYSTEM
     private String ldapUserDn;
 
-    @Value("${ldap.password}")
+    @Value("${ldap.password}") // '{cipher}ERfdkfdfk18674-+sfSFnhrsfbs'
     private String ldapPassword;
 
     @Bean

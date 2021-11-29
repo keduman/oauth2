@@ -1,4 +1,4 @@
-package com.example.oauth2.entity;
+package com.example.oauth2.enumaration;
 
 public enum LoginErrorEnum {
     LDAP_USERNAME_ERROR,

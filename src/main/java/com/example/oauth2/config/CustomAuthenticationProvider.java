@@ -1,7 +1,7 @@
 package com.example.oauth2.config;
 
 import cn.apiclub.captcha.Captcha;
-import com.example.oauth2.entity.LoginErrorEnum;
+import com.example.oauth2.enumaration.LoginErrorEnum;
 import com.example.oauth2.entity.OauthLog;
 import com.example.oauth2.service.OauthService;
 import lombok.extern.slf4j.Slf4j;

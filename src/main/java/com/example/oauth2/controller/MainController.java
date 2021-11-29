@@ -20,7 +20,12 @@ public class MainController {
     public String login (ModelMap model, HttpSession session){
         Integer counter = session.getAttribute(counterValue) == null ? 0 : (Integer) session.getAttribute(counterValue);
         if(counter.intValue() >= Integer.parseInt(captchaNoMaxTries)){
+            Captcha captcha = CaptchaUtil.createCaptcha(200,50);
+            session.setAttribute("captcha", captcha);
+            model.addAttribute("captchaEnc", CaptchaUtil.encodeCaptcha(captcha));
         }
-        return null;
+        counter++;
+        session.setAttribute(counterValue, counter);
+        return "index";
     }
 }

@@ -1,5 +1,6 @@
 package com.example.oauth2.entity;
 
+import com.example.oauth2.enumaration.LoginErrorEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

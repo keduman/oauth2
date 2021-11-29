@@ -6,6 +6,11 @@ import cn.apiclub.captcha.noise.CurvedLineNoiseProducer;
 import cn.apiclub.captcha.text.producer.DefaultTextProducer;
 import cn.apiclub.captcha.text.renderer.DefaultWordRenderer;
 
+import javax.imageio.ImageIO;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Base64;
+
 public class CaptchaUtil {
     private CaptchaUtil() { throw new IllegalStateException("Utility Class");   }
 
@@ -15,6 +20,15 @@ public class CaptchaUtil {
 
     public static String encodeCaptcha( Captcha captcha ){
         String image = null;
-        return null;
+
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ImageIO.write(captcha.getImage(), "jpg", byteArrayOutputStream);
+            byte[] byteArray = Base64.getEncoder().encode(byteArrayOutputStream.toByteArray());
+            image = new String(byteArray);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
     }
 }

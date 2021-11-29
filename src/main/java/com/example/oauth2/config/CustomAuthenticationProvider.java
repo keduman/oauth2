@@ -41,7 +41,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        String remoteIp = attributes.getRequest().getHeader("X-Forwarded-For");
+        String remoteIp = attributes.getRequest().getHeader(XHeaderAuthenticationFilter.oauthIpHeaderKey);
         List<GrantedAuthority> roles = new ArrayList<>();
         List<String> roleList = new ArrayList<>();
 

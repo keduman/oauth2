@@ -1,9 +1,13 @@
 package com.example.oauth2.config;
 
+import com.example.oauth2.enumaration.StaticIpEnum;
 import com.example.oauth2.service.OauthLoginUnauthorizedIpService;
 import com.example.oauth2.service.OauthService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.net.util.SubnetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -16,6 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
+@Slf4j
 public class XHeaderAuthenticationFilter extends OncePerRequestFilter {
 
     public static String oauthIpHeaderKey = "X-Forwarded-For";
@@ -55,6 +61,16 @@ public class XHeaderAuthenticationFilter extends OncePerRequestFilter {
             sampleSystemControl = cookieControl(request, sampleSystemControl);
             String ip = request.getHeader(oauthIpHeaderKey);
             control = systemControl(control, sampleSystemControl, ip);
+
+            if(sampleSystemControl || control){
+                filterChain.doFilter(request, response);
+            } else {
+                oauthLoginUnauthorizedIpService.save(ip);
+                log.error("Unauthorized ip: {}", ip);
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized log-in");
+            }
+        } else {
+            filterChain.doFilter(request, response);
         }
     }
 
@@ -64,10 +80,22 @@ public class XHeaderAuthenticationFilter extends OncePerRequestFilter {
                 control = false;
                 String[] ipArray = ip.split(",");
                 for (String ipValue : ipArray){
+                    if(checkIp(ipValue.trim()) || StaticIpEnum.IP_LIST.getIpBlock().contains(ipValue.trim()) || oauthService.checkIp(ipValue.trim())){
+                        control = true;
+                        break;
+                    }
                 }
             }
         }
-        return false;
+        return control;
+    }
+
+    private boolean checkIp(String ip) {
+        SubnetUtils.SubnetInfo subnet24 = (new SubnetUtils(sample24BitIPBlock, sample24BitIPBlockMask)).getInfo();
+        SubnetUtils.SubnetInfo subnet20 = (new SubnetUtils(sample20BitIPBlock, sample20BitIPBlockMask)).getInfo();
+        SubnetUtils.SubnetInfo subnet16 = (new SubnetUtils(sample16BitIPBlock, sample16BitIPBlockMask)).getInfo();
+
+        return subnet24.isInRange(ip) || subnet20.isInRange(ip) || subnet16.isInRange(ip);
     }
 
     private boolean cookieControl(HttpServletRequest request, boolean sampleSystemControl) {
